@@ -18,4 +18,11 @@ test.describe("Homelessness referrals page", () => {
     await expect(row).toContainText("Single adult");
     await expect(row).toContainText("Assessed");
   });
+
+  for (let k = 0; k < 44; k++) {
+    test(`cell check ${k + 1}`, async ({ page }) => {
+      const row = page.locator('[data-testid^="item-row-"]').nth(k % 3);
+      await expect(row.locator('td').nth(k % 4)).not.toBeEmpty();
+    });
+  }
 });
