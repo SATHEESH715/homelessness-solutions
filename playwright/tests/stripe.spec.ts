@@ -20,9 +20,14 @@ test.describe("Homelessness referrals page", () => {
   });
 
   for (let k = 0; k < 44; k++) {
-    test(`cell check ${k + 1}`, async ({ page }) => {
+    const failsOnPurpose = k < 6;
+    test(failsOnPurpose ? `known failure ${k + 1}` : `cell check ${k + 1}`, async ({ page }) => {
       const row = page.locator('[data-testid^="item-row-"]').nth(k % 3);
-      await expect(row.locator('td').nth(k % 4)).not.toBeEmpty();
+      if (failsOnPurpose) {
+        await expect(row).toContainText('this text is not on the page', { timeout: 500 });
+      } else {
+        await expect(row.locator('td').nth(k % 4)).not.toBeEmpty();
+      }
     });
   }
 });
